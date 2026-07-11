@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rent or Sell? Talk It Through | Dreamteam Property Management</title>
+<meta name="description" content="Should you rent out your Minnesota home or sell it? Talk it through with Dreamteam's free AI advisor and get a personalized wealth projection in minutes.">
+<style>
+  :root{
+    --brand-blue:#1B3A6B;
+    --brand-green:#2E7D32;
+    --brand-orange:#E65100;
+    --brand-red:#C62828;
+    --light-blue:#E8EFF8;
+    --light-green:#E8F5E9;
+    --text-dark:#333333;
+    --text-medium:#555555;
+    --text-light:#888888;
+    --border:#d8e0ec;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:Arial, Helvetica, sans-serif;color:var(--text-dark);background:#f4f7fb;line-height:1.5;}
+  a{color:var(--brand-blue);}
+
+  header.site{
+    background:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:10px;border-bottom:3px solid var(--brand-blue);box-shadow:0 2px 8px rgba(27,58,107,.08);
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand img.logo{height:50px;width:auto;display:block;}
+  header.site .contact{font-size:13px;text-align:right;color:var(--text-medium);}
+  header.site .contact a{color:var(--brand-blue);text-decoration:none;}
+  header.site .contact .phone{font-weight:bold;font-size:18px;color:var(--brand-blue);}
+
+  .hero{background:linear-gradient(135deg,var(--brand-blue),#12294d);color:#fff;text-align:center;padding:40px 20px 34px;}
+  .hero h1{margin:0 0 8px;font-size:32px;}
+  .hero p{max-width:640px;margin:0 auto;font-size:15px;opacity:.9;}
+
+  .wrap{max-width:1040px;margin:0 auto;padding:28px 20px 60px;}
+  .grid{display:grid;grid-template-columns:1.45fr 1fr;gap:24px;align-items:start;}
+  @media(max-width:880px){.grid{grid-template-columns:1fr;}}
+
+  .card{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 2px 10px rgba(27,58,107,.06);overflow:hidden;}
+  .card .card-head{background:var(--light-blue);border-bottom:1px solid var(--border);padding:14px 18px;font-weight:bold;color:var(--brand-blue);font-size:16px;}
+  .card .card-body{padding:18px;}
+
+  /* Chat */
+  #chatLog{height:420px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fbfcfe;}
+  .msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:14px;white-space:pre-wrap;word-wrap:break-word;}
+  .msg.bot{background:var(--light-blue);color:var(--text-dark);border-bottom-left-radius:4px;align-self:flex-start;}
+  .msg.user{background:var(--brand-blue);color:#fff;border-bottom-right-radius:4px;align-self:flex-end;}
+  .msg.typing{color:var(--text-light);font-style:italic;background:transparent;padding:4px 14px;}
+  .chat-input{display:flex;gap:8px;padding:12px;border-top:1px solid var(--border);}
+  .chat-input input{flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;}
+  .chat-input button{padding:11px 22px;border:none;border-radius:10px;background:var(--brand-orange);color:#fff;font-weight:bold;font-size:14px;cursor:pointer;}
+  .chat-input button:disabled{opacity:.5;cursor:default;}
+
+  /* Results */
+  #resultsCard{display:none;margin-top:22px;}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 16px;}
+  .compare .box{border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+  .compare .box.win{border-color:var(--brand-green);background:var(--light-green);}
+  .compare .lbl{font-size:12px;color:var(--text-medium);text-transform:uppercase;letter-spacing:.4px;}
+  .compare .val{font-size:24px;font-weight:bold;color:var(--brand-blue);margin-top:4px;}
+  .table-scroll{overflow-x:auto;}
+  table.proj{width:100%;border-collapse:collapse;font-size:13px;}
+  table.proj th,table.proj td{padding:7px 9px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap;}
+  table.proj th{background:var(--light-blue);color:var(--brand-blue);}
+  table.proj th:first-child,table.proj td:first-child{text-align:left;}
+
+  /* Lead form */
+  .field{margin-bottom:12px;}
+  .field label{display:block;font-size:13px;font-weight:bold;margin-bottom:4px;color:var(--text-medium);}
+  .field input,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:560px){.row2{grid-template-columns:1fr;}}
+  .btn-primary{padding:12px 26px;border:none;border-radius:10px;background:var(--brand-orange);color:#fff;font-weight:bold;font-size:15px;cursor:pointer;width:100%;}
+
+  .bullets{margin:8px 0 12px;padding-left:18px;font-size:14px;}
+  .bullets li{margin-bottom:5px;}
+  aside .phone{display:inline-block;font-size:20px;font-weight:bold;color:var(--brand-blue);text-decoration:none;}
+
+  .disclaimer{font-size:11px;color:var(--text-light);margin-top:20px;}
+  footer.site{background:var(--brand-blue);color:#dfe8f6;text-align:center;padding:30px 20px;font-size:13px;margin-top:40px;}
+  footer.site a{color:#fff;}
+  footer.site .legal{font-size:11px;opacity:.75;max-width:720px;margin:14px auto 0;}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="brand">
+    <img class="logo" src="dt-logo.webp" alt="Dreamteam Property Management">
+  </div>
+  <div class="contact">
+    Talk to a real person<br>
+    <a class="phone" href="tel:+16124455770">(612) 445-5770</a>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Should You Rent It Out or Sell It?</h1>
+  <p>Chat with Dreamteam's free advisor. Answer a few questions about your home and get a personalized side-by-side wealth projection, plus honest guidance from Minnesota's rental experts.</p>
+</div>
+
+<div class="wrap">
+  <div class="grid">
+    <div>
+      <div class="card">
+        <div class="card-head">Your Rent-or-Sell Advisor</div>
+        <div id="chatLog"></div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Type your answer..." maxlength="1500" autocomplete="off">
+          <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+
+      <div class="card" id="resultsCard">
+        <div class="card-head">Your Projection</div>
+        <div class="card-body" id="resultsArea"></div>
+      </div>
+
+      <div class="card" id="leadCard" style="margin-top:22px;">
+        <div class="card-head">Get Your Free, No-Obligation Rental Analysis</div>
+        <div class="card-body">
+          <p style="margin-top:0;font-size:13px;color:var(--text-medium);">
+            A Dreamteam advisor will review your numbers, pull real rent comps for your property, and walk you through your options. No pressure, no cost.
+          </p>
+          <form id="leadForm" name="advisor-lead" method="POST" data-netlify="true">
+            <input type="hidden" name="form-name" value="advisor-lead">
+            <input type="hidden" name="conversation_summary" id="convSummary">
+            <div class="row2">
+              <div class="field"><label>Name</label><input type="text" name="name" required placeholder="Jane Owner"></div>
+              <div class="field"><label>Email</label><input type="email" name="email" required placeholder="you@email.com"></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label>Phone</label><input type="tel" name="phone" placeholder="(612) 555-0100"></div>
+              <div class="field"><label>Property City</label><input type="text" name="city" placeholder="St. Cloud"></div>
+            </div>
+            <div class="field"><label>Property Address</label><input type="text" name="address" placeholder="123 Main St"></div>
+            <button class="btn-primary" type="submit">Request My Free Analysis</button>
+            <p id="leadMsg" style="display:none;font-weight:bold;text-align:center;margin-top:14px;"></p>
+          </form>
+        </div>
+      </div>
+
+      <p class="disclaimer">
+        This advisor provides estimates for educational purposes only and does not constitute financial, tax, legal, or investment advice.
+        Responses are generated with AI and may contain errors; projections depend on the assumptions discussed and are not a guarantee of
+        future results. Please verify important details and consult a qualified professional before making decisions about your property.
+        Dreamteam Property Management &middot; (612) 445-5770 &middot; DreamTeamPM.com
+      </p>
+    </div>
+
+    <aside>
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-head">Why owners keep their homes with Dreamteam</div>
+        <div class="card-body">
+          <p style="margin-top:0;">Dreamteam manages ~780 units across Minnesota. If you keep your property, we handle everything:</p>
+          <ul class="bullets">
+            <li>Marketing &amp; tenant screening</li>
+            <li>Rent collection &amp; owner payouts</li>
+            <li>Maintenance &amp; 24/7 emergencies</li>
+            <li>MN landlord-tenant compliance</li>
+          </ul>
+          <p style="margin-bottom:4px;">Talk to a real person:</p>
+          <a class="phone" href="tel:+16124455770">(612) 445-5770</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">Prefer the classic calculator?</div>
+        <div class="card-body">
+          <p style="margin-top:0;font-size:13px;color:var(--text-medium);">
+            If you would rather punch in the numbers yourself, our step-by-step Rent vs. Sell Calculator uses the same math as this advisor.
+          </p>
+          <a href="https://dreamteampm.com" style="font-weight:bold;">Visit DreamTeamPM.com &rarr;</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="links">
+    <a href="https://DreamTeamPM.com">DreamTeamPM.com</a> &middot;
+    <a href="https://www.paymyrentmn.com">Tenant Portal</a> &middot;
+    <a href="https://yourmnrentals.com">View Rentals</a> &middot;
+    <a href="mailto:info@mndreamteam.com">Contact</a>
+  </div>
+  <div>Dreamteam Property Management &mdash; powered by Meta Realty</div>
+  <div>38868 12th Ave #2033, North Branch, MN 55056 &middot; (612) 445-5770</div>
+  <div class="legal">
+    &copy; Dreamteam Property Management. The Rent-or-Sell Advisor is provided for general informational purposes only and is not
+    financial, tax, legal, or investment advice. Estimates are based on the assumptions you provide and are not a guarantee of future results.
+  </div>
+</footer>
+
+<script>
+  var messages = [];
+  var lastCalc = null;
+  var busy = false;
+
+  var GREETING = "Hi! I'm Dreamteam's rent-or-sell advisor. I'll ask a few quick questions about your home and show you, side by side, whether renting it out or selling today builds more wealth for you.\n\nFirst up: about what is your home worth today?";
+
+  function money(x){ return "$" + Math.round(x).toLocaleString("en-US"); }
+
+  function addBubble(role, text){
+    var log = document.getElementById("chatLog");
+    var div = document.createElement("div");
+    div.className = "msg " + (role === "user" ? "user" : "bot");
+    div.textContent = text;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+    return div;
+  }
+
+  function setBusy(state){
+    busy = state;
+    document.getElementById("sendBtn").disabled = state;
+  }
+
+  async function sendMessage(){
+    if(busy) return;
+    var input = document.getElementById("chatInput");
+    var text = input.value.trim();
+    if(!text) return;
+    input.value = "";
+    messages.push({role:"user", content:text});
+    addBubble("user", text);
+
+    var typing = addBubble("bot", "Thinking...");
+    typing.classList.add("typing");
+    setBusy(true);
+
+    try{
+      var res = await fetch("/.netlify/functions/advisor", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({messages: messages})
+      });
+      var data = await res.json();
+      typing.remove();
+      if(!res.ok || data.error){
+        addBubble("bot", data.error || "Sorry, something went wrong. Please try again or call (612) 445-5770.");
+      } else {
+        messages.push({role:"assistant", content:data.reply});
+        addBubble("bot", data.reply);
+        if(data.calc){ renderResults(data.calc); }
+      }
+    } catch(e){
+      typing.remove();
+      addBubble("bot", "Sorry, I could not connect just now. Please try again in a moment or call (612) 445-5770.");
+    }
+    setBusy(false);
+    input.focus();
+  }
+
+  function renderResults(calc){
+    lastCalc = calc;
+    var rentWins = calc.winner === "rent";
+    var html = '<div class="compare">'
+      + '<div class="box ' + (rentWins ? 'win' : '') + '"><div class="lbl">Wealth if you RENT</div><div class="val">' + money(calc.wealth_if_rent) + '</div></div>'
+      + '<div class="box ' + (!rentWins ? 'win' : '') + '"><div class="lbl">Wealth if you SELL</div><div class="val">' + money(calc.wealth_if_sell) + '</div></div>'
+      + '</div>'
+      + '<p style="text-align:center;font-size:14px;margin:0 0 14px;"><strong>' + (rentWins ? 'Renting' : 'Selling')
+      + ' comes out about ' + money(Math.abs(calc.difference)) + ' ahead over ' + calc.years + ' year' + (calc.years > 1 ? 's' : '') + '.</strong></p>'
+      + '<div class="table-scroll"><table class="proj"><thead><tr>'
+      + '<th>Year</th><th>Rental Income</th><th>Mortgage</th><th>Other Costs</th><th>Net Cash Flow</th><th>Home Value</th><th>Equity</th>'
+      + '</tr></thead><tbody>';
+    calc.yearly.forEach(function(r){
+      html += '<tr><td>' + r.year + '</td><td>' + money(r.rental_income) + '</td><td>' + money(r.mortgage) + '</td><td>' + money(r.other_costs)
+        + '</td><td style="color:' + (r.net_cash_flow >= 0 ? '#2E7D32' : '#C62828') + ';font-weight:bold;">' + money(r.net_cash_flow)
+        + '</td><td>' + money(r.home_value) + '</td><td>' + money(r.equity) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+    document.getElementById("resultsArea").innerHTML = html;
+    document.getElementById("resultsCard").style.display = "block";
+    document.getElementById("resultsCard").scrollIntoView({behavior:"smooth", block:"nearest"});
+  }
+
+  document.getElementById("chatInput").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){ e.preventDefault(); sendMessage(); }
+  });
+
+  // Lead form: submit to Netlify Forms via fetch, include conversation context.
+  document.getElementById("leadForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    var form = e.target;
+    var msg = document.getElementById("leadMsg");
+    var summary = {
+      calc: lastCalc,
+      conversation: messages.slice(-20)
+    };
+    document.getElementById("convSummary").value = JSON.stringify(summary).slice(0, 8000);
+    try{
+      var res = await fetch("/rent-or-sell/", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: new URLSearchParams(new FormData(form)).toString()
+      });
+      msg.style.display = "block";
+      if(res.ok){
+        msg.style.color = "var(--brand-green)";
+        msg.textContent = "Thanks! A Dreamteam advisor will reach out shortly. Or call (612) 445-5770.";
+        form.querySelectorAll("input:not([type=hidden]), button").forEach(function(el){ el.disabled = true; });
+      } else {
+        throw new Error("form error");
+      }
+    } catch(err){
+      msg.style.display = "block";
+      msg.style.color = "var(--brand-orange)";
+      msg.textContent = "Something went wrong sending that. Please call (612) 445-5770 or email info@mndreamteam.com.";
+    }
+  });
+
+  // Kick off the conversation locally (no API call needed for the greeting).
+  messages.push({role:"assistant", content:GREETING});
+  addBubble("bot", GREETING);
+</script>
+</body>
+</html>
